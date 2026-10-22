@@ -1,0 +1,25 @@
+Q4 PREDICTION - written BEFORE running depths 8 and 10
+Written on: 21 Oct 2026, time: __:__ PM (check the taskbar clock)
+
+Observed so far (depths 4 and 6, PostgreSQL = Neo4j in all 12 cases):
+  Set A: 10 -> 43      Set D: 10 -> 44
+  Set B: 46 -> 178     Set E: 47 -> 183
+  Set C: 146 -> 483    Set F: 147 -> 488
+  Each +2 links multiplied the reached accounts by about 3.3 to 4.3.
+
+Prediction for distinct accounts reached (rough, same growth factor):
+  Depth 8:  A/D about 150-200, B/E about 600-750, C/F about 1,500-1,900
+  Depth 10: A/D about 500-800, B/E about 2,000-3,000, C/F about 5,000-7,000
+  (Counts keep growing with depth, and the sets with larger neighbourhoods
+   grow fastest. They may saturate if the network closes up.)
+
+Prediction for timing and failure:
+  - PostgreSQL stays fast at depths 8 and 10, because UNION removes repeated
+    (node, depth) states, so the work is bounded by the reachable nodes per level.
+  - Neo4j enumerates every path (variable-length patterns do not remove
+    repeated nodes), so the number of paths grows much faster than the number
+    of accounts. Depth 6 took almost no time, so depth 8 may still finish in
+    seconds, but depth 10 is likely to be much slower and may hit the 60 s timeout.
+
+What would prove me wrong: Neo4j finishing depth 10 as fast as PostgreSQL, or
+counts that stop growing after depth 6.

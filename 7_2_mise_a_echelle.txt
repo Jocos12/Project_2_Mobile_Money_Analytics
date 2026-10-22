@@ -1,0 +1,21 @@
+7.2 Scalability
+
+Figures: 7.2 (throughput and p95 by number of clients), 7.3 (CPU, PostgreSQL, 16 clients), 7.4 (CPU, Neo4j, 16 clients), 6.3 (Q7 plans).
+
+1 vs 16 clients.
+On Q4 depth 10, PostgreSQL throughput rises from 34.4 to 165.5 queries/s (×4.8), while Neo4j rises from 188.8 to 1,899 queries/s (×10.1). On Q7 bound 6, PostgreSQL goes from 12.0 to 41.3 queries/s (×3.4) and Neo4j from 112.9 to 719.4 queries/s (×6.4). At 16 clients, Neo4j therefore delivers about 11 times the throughput of PostgreSQL on Q4 and 17 times on Q7.
+
+Saturation.
+PostgreSQL plateaus from 8 clients onward and drops on Q7 at 16 clients. During Q7 at 16 clients, the machine (Intel Core i7-1355U, 10 cores, 12 logical processors) reaches 91% CPU with all 12 logical processors saturated, memory at 89% and disk at 0%. The ceiling is therefore compute-bound, not I/O-bound. With Neo4j, CPU is at 41% at the time of capture, for a throughput 10 to 18 times higher. This value is a snapshot of the whole machine (Python clients included). Neo4j’s slight decline between 8 and 16 clients (822 to 719 queries/s) is not explained by CPU; its cause was not measured.
+
+Explanation by query plan.
+For set B, bound 6, version v2 (search from a single endpoint) runs in 87,337 ms, versus 192 ms for v3 (search from both ends); v1 exceeds the time limit. The recursive CTE explores a large number of states, which consumes CPU.
+
+Throughput and response time.
+Beyond 8 clients, additional clients no longer increase throughput: they simply wait. On Q7, PostgreSQL’s median reaches 381 ms and its p95 531 ms, versus 19 ms and 51 ms for Neo4j.
+
+After SQL optimization.
+The measurements use v3. Neo4j’s advantage remains on Q7, but v3 substantially narrows the gap compared with v2. Q4 received no SQL optimization, so its gap has not been tested against optimized SQL. These conclusions hold for this machine, these sets A/B/C and these workloads.
+
+Limitations.
+At 1 client, PostgreSQL’s median on Q7 (71.9 ms) is inflated by machine noise (observed minimum of about 30 ms). A second control run at 16 clients gives 36 to 53 queries/s and confirms the plateau.

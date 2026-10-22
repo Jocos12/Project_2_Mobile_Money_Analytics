@@ -1,0 +1,28 @@
+=== Q2 full month [PROFILE] ===
+ProduceResults@neo4j  rows=30  dbHits=0
+  Sort@neo4j  rows=30  dbHits=0
+    EagerAggregation@neo4j  rows=30  dbHits=20003300
+      Projection@neo4j  rows=20003300  dbHits=60009900
+        DirectedRelationshipTypeScan@neo4j  rows=20003300  dbHits=20003301
+
+=== Q4 set B depth 10 [PROFILE] ===
+ProduceResults@neo4j  rows=5  dbHits=0
+  Sort@neo4j  rows=5  dbHits=0
+    EagerAggregation@neo4j  rows=5  dbHits=228
+      Filter@neo4j  rows=228  dbHits=228
+        Expand(All)@neo4j  rows=228  dbHits=912
+          Projection@neo4j  rows=228  dbHits=0
+            Filter@neo4j  rows=228  dbHits=453
+              VarLengthExpand(Pruning,BFS,All)@neo4j  rows=453  dbHits=1885
+                NodeUniqueIndexSeek@neo4j  rows=1  dbHits=2
+
+=== Q7 set B bound 6 [PROFILE] ===
+ProduceResults@neo4j  rows=1  dbHits=0
+  Projection@neo4j  rows=1  dbHits=0
+    ShortestPath@neo4j  rows=1  dbHits=18218
+      CartesianProduct@neo4j  rows=1  dbHits=0
+        Filter@neo4j  rows=1  dbHits=1
+          NodeUniqueIndexSeek@neo4j  rows=1  dbHits=2
+        Filter@neo4j  rows=1  dbHits=1
+          NodeUniqueIndexSeek@neo4j  rows=1  dbHits=2
+
